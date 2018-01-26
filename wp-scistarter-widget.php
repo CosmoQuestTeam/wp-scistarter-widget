@@ -4,13 +4,16 @@ Plugin Name: Scistarter Widget
 Plugin URI: https://github.com/CosmoQuestTeam/wp-scistarter-widget
 Description: Display SciSarter Widget
 Author: Ryan Owens
-Version: 1
+Version: 1.0
 Author URI: https://cosmoquest.org/x
 License: Apache-2.0
 */
 
 class Scistarter_Widget extends WP_Widget
 {
+    /**
+     * Widget Constructor
+     */
     public function __construct()
     {
         $widget_ops = array(
@@ -20,6 +23,12 @@ class Scistarter_Widget extends WP_Widget
         parent::__construct('scistarter_widget', 'SciStarter Widget', $widget_ops);
     }
 
+    /**
+     * Display Widget Content
+     * @param  Array  $args
+     * @param  Array  $instance
+     * @return void
+     */
     public function widget($args, $instance)
     {
         echo $args['before_widget'];
@@ -28,11 +37,20 @@ class Scistarter_Widget extends WP_Widget
         }
         if (!empty($instance['key'])) {
             $key = $instance['key'];
-            echo `<iframe frameBorder="0" width="200" height="244" src="https://scistarter.com/widget/${key}"></iframe>`;
+            echo '<div style="width: 220px;height: 300px; padding: 10px;">';
+            echo '<iframe frameBorder="0" width="100%" height="100%" src="https://scistarter.com/widget/' .$key . '"></iframe>';
+            echo '</div>';
+        } else {
+            echo 'Please enter a SciStarter Widget key in the Widget settings';
         }
         echo $args['after_widget'];
     }
 
+    /**
+     * Display Form in Admin Panel
+     * @param  Array $instance
+     * @return void
+     */
     public function form($instance)
     {
         $title = !empty($instance['title'])? $instance['title']: esc_html__('SciStarter', 'text_domain');
@@ -49,6 +67,12 @@ class Scistarter_Widget extends WP_Widget
         <?php
     }
 
+    /**
+     * Update Widget information
+     * @param  Array $new_instance
+     * @param  Array $old_instance
+     * @return void
+     */
     public function update($new_instance, $old_instance)
     {
         $instance = array();
@@ -59,9 +83,14 @@ class Scistarter_Widget extends WP_Widget
     }
 }
 
-function register_scistarter_widget() {
-	register_widget( 'Scistarter_Widget' );
+/**
+ * Register the widget with Wp
+ * @return void
+ */
+function register_scistarter_widget()
+{
+    register_widget('Scistarter_Widget');
 }
-add_action( 'widgets_init', 'register_scistarter_widget' );
+add_action('widgets_init', 'register_scistarter_widget');
 
 ?>
